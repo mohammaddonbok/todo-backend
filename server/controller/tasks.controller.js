@@ -1,6 +1,7 @@
 
 const { response } = require('express')
 const Tasks = require('../models/tasks.model')
+const tasksModel = require('../models/tasks.model')
 
 //Get All Tasls
 module.exports.getAllTasks =  async (req ,res) => {
@@ -18,9 +19,9 @@ module.exports.getAllTasks =  async (req ,res) => {
 
 //Get Task By Id
 module.exports.getTaskById = async (req,res) =>{
-    let response
-    response = await getTask(req,res)
-    res.json(response)
+    let task
+    task = await getTask(req,res)
+    res.json(task)
 }
 
 //Create Task
@@ -40,8 +41,23 @@ module.exports.createTask = async (req,res) => {
 }
  //Update Task
  module.exports.updateTask = async (req, res) => {
-    
-    
+    let task = await getTask(req,res)
+    if(req.body.title != null){
+        task.title = req.body.title
+    }
+    if(req.body.description != null){
+        task.description = req.body.description
+    }
+    if(req.body.state != null){
+        task.state = req.body.state
+    }
+    try{
+        const updatedTask = await task.save()
+        res.json(updatedTask)
+    }
+    catch(err){
+        res.status(400).json({message:err.message})
+    }
 }
 
 // Delete Task
@@ -65,6 +81,5 @@ async function getTask(req, res , next){
     } catch(err) {
         return res.status(500).json({message: err.message})
     }
-    console.log(task)
     return task
 }
