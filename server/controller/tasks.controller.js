@@ -1,7 +1,5 @@
 
-const { response } = require('express')
 const Tasks = require('../models/tasks.model')
-const tasksModel = require('../models/tasks.model')
 
 //Get All Tasks
 module.exports.getAllTasks =  async (req ,res) => {
@@ -39,8 +37,8 @@ module.exports.createTask = async (req,res) => {
         state : 'toDo'
     })
     try{
-        const newTask = await task.save();
-        res.status(200).json(newTask)
+        await task.save();
+        res.status(200).json({message:"New Task Created"})
     }
     catch(err){
         res.status(400).json({message: err.message})
