@@ -11,7 +11,6 @@ db.once('open', ()=> console.log('Connected to Database'))
 
 app.use(express.json())
 app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
-
 require('./server/routes/tasks.route')(app);
 app.listen(5000, () => { 
     console.log(`Server Started`);
