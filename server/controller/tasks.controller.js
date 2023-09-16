@@ -3,10 +3,17 @@ const { response } = require('express')
 const Tasks = require('../models/tasks.model')
 const tasksModel = require('../models/tasks.model')
 
-//Get All Tasls
+//Get All Tasks
 module.exports.getAllTasks =  async (req ,res) => {
     try {
-        const tasks = await Tasks.find()
+        let tasks
+        var status = req.query.status;
+        if(status == "done"){
+            tasks = await Tasks.find({state: "done"})
+        }
+        else{
+            tasks = await Tasks.find({state:{$ne:"done"}})
+        }
         if(tasks == null){
             res.json({message:"Task Not Found"})
         }
